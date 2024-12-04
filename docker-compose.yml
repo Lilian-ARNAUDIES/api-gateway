@@ -2,15 +2,15 @@ services:
   auth-service:
     build:
       context: ./auth-microservice
-      dockerfile: Dockerfile
+      dockerfile: DockerFile
     container_name: auth-service
     depends_on:
       - mongodb
     develop:
       watch:
         - action: sync
-          path: ./auth-microservice
-          target: /app
+          path: ./auth-microservice/
+          target: /app/
           ignore:
             - node_modules/
         - action: rebuild
@@ -19,15 +19,19 @@ services:
   api-gateway:
     build:
       context: ./api-gateway
-      dockerfile: Dockerfile
+      dockerfile: DockerFile
     container_name: api-gateway
     depends_on:
       - auth-service
+    ports:
+      - "5000:5000"
+    environment:
+      - AUTH_SERVICE_URL=http://auth-service:3000
     develop:
       watch:
         - action: sync
-          path: ./api-gateway
-          target: /app
+          path: ./api-gateway/
+          target: /app/
           ignore:
             - node_modules/
         - action: rebuild

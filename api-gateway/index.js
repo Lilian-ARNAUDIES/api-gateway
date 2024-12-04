@@ -10,5 +10,5 @@ app.use('/api/auth', proxy(process.env.AUTH_SERVICE_URL, {
 }));
 
 app.listen(process.env.PORT, () => {
-  console.log(`API Gateway en cours d'exécution sur le port ${process.env.PORT}`);
+  console.log(`API Gateway en cours d'exécution sur le port : ${process.env.PORT}`);
 });

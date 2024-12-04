@@ -7,7 +7,7 @@ const UserSchema = new mongoose.Schema({
   password: { type: String, required: true },
 });
 
-UserSchema.plugin(uniqueValidator, { message: 'Cet email est déjà utilisé.' });
+UserSchema.plugin(uniqueValidator, { message: 'Cet email est déjà utilisé' });
 
 UserSchema.pre('save', async function (next) {
   if (!this.isModified('password')) return next();
