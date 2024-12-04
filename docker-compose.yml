@@ -1,0 +1,45 @@
+services: 
+  auth-service:
+    build:
+      context: ./auth-microservice
+      dockerfile: Dockerfile
+    container_name: auth-service
+    depends_on:
+      - mongodb
+    develop:
+      watch:
+        - action: sync
+          path: ./auth-microservice
+          target: /app
+          ignore:
+            - node_modules/
+        - action: rebuild
+          path: ./auth-microservice/package.json
+
+  api-gateway:
+    build:
+      context: ./api-gateway
+      dockerfile: Dockerfile
+    container_name: api-gateway
+    depends_on:
+      - auth-service
+    develop:
+      watch:
+        - action: sync
+          path: ./api-gateway
+          target: /app
+          ignore:
+            - node_modules/
+        - action: rebuild
+          path: ./api-gateway/package.json
+
+  mongodb:
+    image: mongo:8
+    container_name: mongodb
+    volumes:
+      - mongo-data:/data/db
+    environment:
+      MONGO_INITDB_DATABASE: authdb
+
+volumes:
+  mongo-data:
